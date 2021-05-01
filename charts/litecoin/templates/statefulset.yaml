@@ -38,6 +38,9 @@ spec:
             mountPath: /opt/litecoin/.litecoin
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+{{- if .Values.cmd.args }}
+          args: {{ .Values.cmd.args }}
+{{- end }}
       volumes:
       - name: litecoin-data
         persistentVolumeClaim:
