@@ -28,6 +28,24 @@ run:: ## runs the docker image locally
 run-shell:: ## runs the docker image locally, but with a shell
 		@docker run -it $(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION) /bin/sh
 
+helm-install:: ## installs the application using the local helm chart
+		@helm install \
+		--namespace crypto \
+		-f helm-values.local.yaml \
+		litecoin charts/litecoin
+
+helm-uninstall:: ## uninstalls the helm chart
+		@helm uninstall \
+		--namespace crypto \
+		litecoin
+
+helm-validate:: ## dry run/print out the helm chart
+		@helm install \
+		--dry-run \
+		--debug \
+		-f helm-values.local.yaml \
+			litecoin charts/litecoin
+
 # A help target including self-documenting targets (see the awk statement)
 define HELP_TEXT
 Usage: make [TARGET]... [MAKEVAR1=SOMETHING]...
