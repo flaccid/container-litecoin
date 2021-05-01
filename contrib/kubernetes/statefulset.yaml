@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: litecoin
+  labels:
+    app.kubernetes.io/name: litecoin
+    app.kubernetes.io/instance: litecoin
+    app.kubernetes.io/version: "0.0.1"
+spec:
+  serviceName: litecoin
+  # lock on data directory required, cannot be horizontally scaled
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: litecoin
+      app.kubernetes.io/instance: litecoin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: litecoin
+        app.kubernetes.io/instance: litecoin
+    spec:
+      serviceAccountName: litecoin
+      securityContext:
+        {}
+      containers:
+        - name: litecoin
+          securityContext:
+            {}
+          image: "flaccid/litecoin:0.18.1"
+          imagePullPolicy: Always
+          volumeMounts:
+          - name: litecoin-data
+            mountPath: /opt/litecoin/.litecoin
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+      volumes:
+      - name: litecoin-data
+        persistentVolumeClaim:
+          claimName: litecoin-data
