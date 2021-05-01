@@ -10,22 +10,22 @@ WORKING_DIR := $(shell pwd)
 
 .PHONY: build push
 
-release:: build push ## Builds and pushes the docker image to the registry
+docker-release:: docker-build docker-push ## Builds and pushes the docker image to the registry
 
-push:: ## Pushes the docker image to the registry
+docker-push:: ## Pushes the docker image to the registry
 		@docker push $(IMAGE_TAG)
 
-build:: ## Builds the docker image locally
+docker-build:: ## Builds the docker image locally
 		@echo http_proxy=$(HTTP_PROXY) http_proxy=$(HTTPS_PROXY)
 		@docker build --pull \
 		--build-arg=http_proxy=$(HTTP_PROXY) \
 		--build-arg=https_proxy=$(HTTPS_PROXY) \
 		-t $(IMAGE_TAG) $(WORKING_DIR)
 
-run:: ## runs the docker image locally
+docker-run:: ## runs the docker image locally
 		@docker run -it $(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
-run-shell:: ## runs the docker image locally, but with a shell
+docker-run-shell:: ## runs the docker image locally, but with a shell
 		@docker run -it $(DOCKER_REGISTRY)/$(IMAGE_ORG)/$(IMAGE_NAME):$(IMAGE_VERSION) /bin/sh
 
 helm-install:: ## installs the application using the local helm chart
