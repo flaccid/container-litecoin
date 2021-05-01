@@ -5,7 +5,7 @@ ENV LITECOIN_TARBALL_URL=https://download.litecoin.org/litecoin-${LITECOIN_VERSI
 COPY litecoin-${LITECOIN_VERSION}-linux-signatures.asc /usr/src/
 WORKDIR /usr/src
 RUN apk add --update --no-cache curl outils-sha256 && \
-    curl -Ssv "$LITECOIN_TARBALL_URL" > litecoin-${LITECOIN_VERSION}-x86_64-linux-gnu.tar.gz && \
+    curl -Ss "$LITECOIN_TARBALL_URL" > litecoin-${LITECOIN_VERSION}-x86_64-linux-gnu.tar.gz && \
     echo "$(grep litecoin-${LITECOIN_VERSION}-x86_64-linux-gnu.tar.gz litecoin-${LITECOIN_VERSION}-linux-signatures.asc)" | sha256sum -c && \
     tar zxvf "litecoin-${LITECOIN_VERSION}-x86_64-linux-gnu.tar.gz" && \
     ln -sv "litecoin-${LITECOIN_VERSION}" ./litecoin
@@ -25,4 +25,4 @@ RUN adduser \
 EXPOSE 9333
 WORKDIR /opt/litecoin
 USER litecoin
-CMD ["bin/litecoind"]
+ENTRYPOINT ["bin/litecoind"]
