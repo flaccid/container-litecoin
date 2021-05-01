@@ -37,9 +37,7 @@ spec:
           - name: litecoin-data
             mountPath: /opt/litecoin/.litecoin
           resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
+            {{- toYaml .Values.resources | nindent 12 }}
       volumes:
       - name: litecoin-data
         persistentVolumeClaim:
